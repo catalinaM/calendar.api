@@ -1,0 +1,7 @@
+{
+    "require": {
+        "joshcam/mysqli-database-class": "dev-master",
+        "aura/autoload": "^2.0",
+        "firebase/php-jwt": "^3.0"
+    }
+}

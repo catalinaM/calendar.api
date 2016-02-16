@@ -6,7 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Firebase\\Token\\' => array($vendorDir . '/firebase/token-generator/src'),
+    'Universal\\' => array($vendorDir . '/corneltek/universal/src/Universal'),
+    'Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
+    'Symfony\\Component\\ClassLoader\\' => array($vendorDir . '/symfony/class-loader'),
+    'Pux\\' => array($vendorDir . '/corneltek/pux/src/Pux'),
+    'GetOptionKit\\' => array($vendorDir . '/corneltek/getoptionkit/src/GetOptionKit'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
+    'CodeGen\\' => array($vendorDir . '/corneltek/codegen/src/CodeGen'),
+    'ClassTemplate\\' => array($vendorDir . '/corneltek/class-template/src/ClassTemplate'),
+    'CLIFramework\\' => array($vendorDir . '/corneltek/cliframework/src/CLIFramework'),
     'Aura\\Autoload\\' => array($vendorDir . '/aura/autoload/src'),
 );

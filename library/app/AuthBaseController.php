@@ -9,18 +9,20 @@ class AuthBaseController extends BaseController{
 	protected $authUser;
 
     public function __construct() {
-        parent::__construct();
-
-		$token = null;
 		$headers = apache_request_headers();
 		if(isset($headers['Authorization'])){
-			$matches = array();
-			preg_match('/Token token="(.*)"/', $headers['Authorization'], $matches);
-			if(isset($matches[1])){
-				$token = $matches[1];
+			if (isset($_SERVER['PHP_AUTH_USER'])) {
+				$token = $_SERVER['PHP_AUTH_USER'];
+			} else {
+				$matches = array();
+				preg_match('/(Token token="(.*)")|(Basic (.*)=)/', $headers['Authorization'], $matches);
+				if(isset($matches[4])){
+					$token = base64_decode($matches[4]);
+				}
 			}
 		}
-		if (!isset($token))  $this->sendError(403);
+
+		if (!isset($token))  $this->sendError('Unauthorized access', 403);
 
 		$this->verifyToken($token);
 	}
@@ -29,8 +31,8 @@ class AuthBaseController extends BaseController{
 	private function verifyToken($token){
 		$secretKey = base64_decode(SECRET_KEY);
 		$jwt = JWT::decode($token, $secretKey, array('HS512'));
-		if (!$jwt['id']) return false;
-		$user = UserMapper::getInstance()->getById($jwt['id']);
+		if (!isset($jwt->uid)) return false;
+		$user = UserMapper::getInstance()->getById($jwt->uid);
 
 		if (!$user->getId()) return false;
 

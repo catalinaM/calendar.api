@@ -42,6 +42,12 @@ class EventMapper extends AbstractMapper
         return $this->_getBy($where);
     }
 
+    /**
+     * @param Event $event
+     * @param $calendarId
+     * @param $userId
+     * @return bool
+     */
     public function delete(Event $event, $calendarId, $userId)
     {
         //TODO: implement flags and try to avoid db deleting
@@ -54,6 +60,11 @@ class EventMapper extends AbstractMapper
         return parent::delete($event);
     }
 
+    /**
+     * @param Event $event
+     * @param $calendarId
+     * @param $userId
+     */
     public function save(Event $event, $calendarId, $userId){
         parent::insert($event);
         $connection = array(
@@ -83,6 +94,11 @@ class EventMapper extends AbstractMapper
         return $this->mapRowToModel($row);
     }
 
+    /**
+     * @param Event $event
+     * @param $calendarId
+     * @param $userId
+     */
     public function update(Event $event, $calendarId, $userId){
         parent::update($event);
         if (!$this->getUserCalendarEvent($event->getId(), $calendarId, $userId)->getId()) {
@@ -97,12 +113,42 @@ class EventMapper extends AbstractMapper
 
     /**
      * @param $userId
+     * @param $sort
      * @return Event[]
      * @throws \Exception
      */
     public function findByUserId($userId, $sort = null){
+
         $this->db->join("users_calendars_events uce", "uce.event_id=e.id", "INNER");
         $this->db->where("uce.user_id", $userId);
+        if ($sort) $this->db->orderBy("e.from", 'ASC');
+
+        $rows = $this->db->get("events e", null, "e.*");
+
+        $events = array();
+        foreach($rows as $row){
+            $events[] = $this->mapRowToModel($row);
+        }
+
+        return $events;
+    }
+
+
+    /**
+     * @param $userId
+     * @param $calendarId
+     * @param $sort
+     * @return Event[]
+     * @throws \Exception
+     */
+    public function findByUserIdAndCalendar($userId, $calendarId, $sort = null){
+
+        $this->db->join("users_calendars_events uce", "uce.event_id=e.id", "INNER");
+        $this->db->where("uce.user_id", $userId);
+        $this->db->where("uce.calendar_id", $calendarId);
+
+        if ($sort) $this->db->orderBy("e.from", 'ASC');
+
         $rows = $this->db->get("events e", null, "e.*");
 
         $events = array();

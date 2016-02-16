@@ -6,12 +6,23 @@ use Mappers\EventMapper;
 use Models\Event;
 
 class EventController extends AuthBaseController{
+
+	/**
+	 * @param $id
+	 * @Route("event/:id")
+	 * @Method("GET")
+	 */
 	public function getAction($id){
+		if (!$id) $this->sendBadFilterResponse();
 		$event = EventMapper::getInstance()->getById($id);
 		if (!$event->getId()) $this->sendBadFilterResponse();
 		$this->sendResponse((array)$event);
 	}
 
+	/**
+	 * @Route("event/create")
+	 * @Method("POST")
+	 */
 	public function createAction(){
 		$request = $this->getRequest();
 		$event = $this->mapRequestToModel($request);
@@ -29,7 +40,17 @@ class EventController extends AuthBaseController{
 		$event->setTo($request['to']);
 		return $event;
 	}
+
+
+	/**
+	 * @param $id
+	 * @Route("event/:id")
+	 * @Method("PUT")
+	 */
 	public function updateAction($id){
+
+		if (!$id) $this->sendBadFilterResponse();
+
 		$event = EventMapper::getInstance()->getById($id);
 		if (!$event->getId()) $this->sendBadFilterResponse();
 
@@ -40,7 +61,16 @@ class EventController extends AuthBaseController{
 
 		$this->sendResponse((array)$event);
 	}
+
+	/**
+	 * @param $id
+	 * @Route("event/:id")
+	 * @Method("DELETE")
+	 */
 	public function deleteAction($id){
+
+		if (!$id) $this->sendBadFilterResponse();
+
 		$event = EventMapper::getInstance()->getById($id);
 		if (!$event->getId()) $this->sendBadFilterResponse();
 		EventMapper::getInstance()->delete($event, $_REQUEST['calendar'], $this->authUser->getId());

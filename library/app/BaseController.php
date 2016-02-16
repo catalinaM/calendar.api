@@ -1,8 +1,9 @@
 <?php
 namespace App;
 
-abstract class BaseController {
+class BaseController extends \Pux\Controller{
 	protected $request;
+
 	public function delete(){
 		$this->sendError('Not found.', 404);
 	}
@@ -21,7 +22,6 @@ abstract class BaseController {
 
 	protected function getRequest(){
 		if ($this->request) return $this->request;
-
 		switch($_SERVER['REQUEST_METHOD'])
 		{
 			case 'GET': $request = $_GET; break;

@@ -35,5 +35,5 @@ REFERENCES users(id),
 CONSTRAINT fk_userscalendars_calendars FOREIGN KEY (calendar_id)
 REFERENCES calendars(id),
 CONSTRAINT fk_users_calendar_events_calendars FOREIGN KEY (event_id)
-REFERENCES events(id),
+REFERENCES events(id)
 );

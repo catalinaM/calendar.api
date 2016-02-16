@@ -9,6 +9,10 @@ use Firebase\JWT\JWT;
 
 class UserController extends BaseController {
 
+    /**
+     * @Route("user/login")
+     * @Method("GET")
+     */
     public function loginAction(){
         $request = $this->getRequest();
         $existingUser = UserMapper::getInstance()->getByName($request['username']);
@@ -40,6 +44,10 @@ class UserController extends BaseController {
         return $jwt;
     }
 
+    /**
+     * @Route("user/register")
+     * @Method("POST")
+     */
     public function registerAction(){
         $request = $this->getRequest();
         //TODO: validate request
@@ -59,7 +67,7 @@ class UserController extends BaseController {
         $user->setPasswordHash($hash);
         UserMapper::getInstance()->insert($user);
 
-        $this->sendResponse(array("sd"=>"sad"));
+        $this->sendResponse(array("user"=> (array) $user));
     }
 
 }
